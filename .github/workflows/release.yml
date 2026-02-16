@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: windows-latest
+    
+    permissions:
+      contents: write
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Publish win-x64
+      run: dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=true -o ./publish/win-x64
+    
+    - name: Publish linux-x64
+      run: dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=true -o ./publish/linux-x64
+    
+    - name: Publish osx-x64
+      run: dotnet publish -c Release -r osx-x64 --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=true -o ./publish/osx-x64
+    
+    - name: Publish osx-arm64
+      run: dotnet publish -c Release -r osx-arm64 --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=true -o ./publish/osx-arm64
+    
+    - name: Create release archives
+      shell: pwsh
+      run: |
+        # Create zip for Windows
+        Compress-Archive -Path ./publish/win-x64/Sprite4SteamExtractor.exe -DestinationPath ./Sprite4SteamExtractor-win-x64.zip
+        
+        # Create tar.gz for Linux
+        tar -czf ./Sprite4SteamExtractor-linux-x64.tar.gz -C ./publish/linux-x64 Sprite4SteamExtractor
+        
+        # Create tar.gz for macOS x64
+        tar -czf ./Sprite4SteamExtractor-osx-x64.tar.gz -C ./publish/osx-x64 Sprite4SteamExtractor
+        
+        # Create tar.gz for macOS ARM64
+        tar -czf ./Sprite4SteamExtractor-osx-arm64.tar.gz -C ./publish/osx-arm64 Sprite4SteamExtractor
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          Sprite4SteamExtractor-win-x64.zip
+          Sprite4SteamExtractor-linux-x64.tar.gz
+          Sprite4SteamExtractor-osx-x64.tar.gz
+          Sprite4SteamExtractor-osx-arm64.tar.gz
+        draft: false
+        prerelease: false
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

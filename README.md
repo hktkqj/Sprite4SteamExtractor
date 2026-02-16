@@ -53,6 +53,17 @@ The tool currently supports:
 4. Automated CG composition (`--combine`)
 5. Parallelized extraction and CG processing
 
+## Download
+
+Pre-built binaries are available in the [Releases](https://github.com/hktkqj/Sprite4SteamExtractor/releases) page. Download the appropriate version for your platform:
+
+- **Windows**: `Sprite4SteamExtractor-win-x64.zip`
+- **Linux**: `Sprite4SteamExtractor-linux-x64.tar.gz`
+- **macOS (Intel)**: `Sprite4SteamExtractor-osx-x64.tar.gz`
+- **macOS (Apple Silicon)**: `Sprite4SteamExtractor-osx-arm64.tar.gz`
+
+Extract the archive and run the executable directly - no installation required.
+
 ## Usage
 
 ### Show help
@@ -120,14 +131,35 @@ dotnet run -- --game AOKANA --extract --output "D:\\out" "D:\\path\\to\\evcg2.da
 
 ## 5) Publish single-file executable
 
-Project already configures single-file/self-contained publish for `win-x64`.
+To publish for a specific platform:
 
 ```bash
-dotnet publish -c Release
+# Windows
+dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=true
+
+# Linux
+dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=true
+
+# macOS (Intel)
+dotnet publish -c Release -r osx-x64 --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=true
+
+# macOS (Apple Silicon)
+dotnet publish -c Release -r osx-arm64 --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=true
 ```
 
 Output is typically under:
-- `bin\\Release\\net10.0\\win-x64\\publish\\`
+- `bin/Release/net8.0/<runtime-id>/publish/`
+
+## Automated Releases
+
+The repository is configured with GitHub Actions to automatically build and publish binaries when a new tag is pushed. To create a new release:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+The workflow will automatically build binaries for all supported platforms and create a GitHub release with the binaries attached.
 
 ## Development Notes
 

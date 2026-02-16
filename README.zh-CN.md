@@ -51,6 +51,17 @@ The tool currently supports:
 4. 自动 CG 合成（`--combine`）
 5. 并行提取与并行合成
 
+## 下载
+
+预编译的二进制文件可以在 [Releases](https://github.com/hktkqj/Sprite4SteamExtractor/releases) 页面下载。请选择适合您平台的版本：
+
+- **Windows**: `Sprite4SteamExtractor-win-x64.zip`
+- **Linux**: `Sprite4SteamExtractor-linux-x64.tar.gz`
+- **macOS (Intel)**: `Sprite4SteamExtractor-osx-x64.tar.gz`
+- **macOS (Apple Silicon)**: `Sprite4SteamExtractor-osx-arm64.tar.gz`
+
+解压后可直接运行，无需安装。
+
 ## 使用方法
 
 ### 查看帮助
@@ -118,14 +129,35 @@ dotnet run -- --game AOKANA --extract --output "D:\\out" "D:\\path\\to\\evcg2.da
 
 ### 5）发布单文件可执行程序
 
-项目已启用 `PublishSingleFile`、`SelfContained` 与 `win-x64` 发布配置。
+为特定平台发布：
 
 ```bash
-dotnet publish -c Release
+# Windows
+dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=true
+
+# Linux
+dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=true
+
+# macOS (Intel)
+dotnet publish -c Release -r osx-x64 --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=true
+
+# macOS (Apple Silicon)
+dotnet publish -c Release -r osx-arm64 --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=true
 ```
 
 默认输出目录通常为：
-- `bin\\Release\\net10.0\\win-x64\\publish\\`
+- `bin/Release/net8.0/<runtime-id>/publish/`
+
+## 自动发布
+
+仓库已配置 GitHub Actions，在推送新标签时会自动构建并发布二进制文件。创建新版本的方法：
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+工作流会自动为所有支持的平台构建二进制文件，并创建包含这些文件的 GitHub Release。
 
 ## 新游戏支持（雪碧还出新游戏吗，，，）
 
