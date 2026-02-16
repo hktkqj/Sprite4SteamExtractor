@@ -29,12 +29,6 @@ jobs:
     - name: Publish linux-x64
       run: dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=true -o ./publish/linux-x64
     
-    - name: Publish osx-x64
-      run: dotnet publish -c Release -r osx-x64 --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=true -o ./publish/osx-x64
-    
-    - name: Publish osx-arm64
-      run: dotnet publish -c Release -r osx-arm64 --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=true -o ./publish/osx-arm64
-    
     - name: Create release archives
       shell: pwsh
       run: |
@@ -43,21 +37,13 @@ jobs:
         
         # Create tar.gz for Linux
         tar -czf ./Sprite4SteamExtractor-linux-x64.tar.gz -C ./publish/linux-x64 Sprite4SteamExtractor
-        
-        # Create tar.gz for macOS x64
-        tar -czf ./Sprite4SteamExtractor-osx-x64.tar.gz -C ./publish/osx-x64 Sprite4SteamExtractor
-        
-        # Create tar.gz for macOS ARM64
-        tar -czf ./Sprite4SteamExtractor-osx-arm64.tar.gz -C ./publish/osx-arm64 Sprite4SteamExtractor
-    
+  
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
         files: |
           Sprite4SteamExtractor-win-x64.zip
           Sprite4SteamExtractor-linux-x64.tar.gz
-          Sprite4SteamExtractor-osx-x64.tar.gz
-          Sprite4SteamExtractor-osx-arm64.tar.gz
         draft: false
         prerelease: false
         generate_release_notes: true
