@@ -59,8 +59,6 @@ Pre-built binaries are available in the [Releases](https://github.com/hktkqj/Spr
 
 - **Windows**: `Sprite4SteamExtractor-win-x64.zip`
 - **Linux**: `Sprite4SteamExtractor-linux-x64.tar.gz`
-- **macOS (Intel)**: `Sprite4SteamExtractor-osx-x64.tar.gz`
-- **macOS (Apple Silicon)**: `Sprite4SteamExtractor-osx-arm64.tar.gz`
 
 Extract the archive and run the executable directly - no installation required.
 
@@ -88,6 +86,7 @@ Sprite4SteamExtractor.exe --game AOKANA --extract --output "D:\\out\\extract" "D
 
 ```bash
 Sprite4SteamExtractor.exe --game KOICHOCO --combine "C:\\SteamLibrary\\steamapps\\common\\KoiChoco\\KoiChoco_Data" --output "D:\\out\\cg"
+Sprite4SteamExtractor.exe -g AOKANA -o .\Test\ -c "C:\SteamLibrary\steamapps\common\Aokana\Aokana_Data"
 ```
 
 After composition, final images are written to:
